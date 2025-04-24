@@ -1,14 +1,22 @@
-<li id="<%= dom_id(task) %>" class="list-group-item border-0 py-2">
-  <div class="d-flex justify-content-between align-items-center w-100">
+<%= turbo_frame_tag dom_id(task), tag: :li, class: 'list-group-item border-0 py-2' do %>
+  <div class="d-flex justify-content-between align-items-center">
     <span><%= task.name %></span>
 
     <div class="d-flex align-items-center gap-2">
-      <span class="badge bg-light text-dark"><%= l task.expires_at.to_date %></span>
+      <span class="badge bg-light text-dark">
+        <%= l task.expires_at.to_date %>
+      </span>
 
-      <%= button_to '', [project, task],
+      <%= button_to 'Edit', edit_project_task_path(project, task),
+                    method: :get,
+                    class:  'btn btn-outline-secondary btn-sm',
+                    data:   { turbo_stream: true, turbo_frame: dom_id(task) } %>
+
+      <%= button_to '',
+                    [project, task],
                     method: :delete,
                     class:  'btn btn-close p-0',
-                    form:   { data: { turbo_stream: true, turbo_frame: 'projects' } } %>
+                    form:   { data: { turbo_stream: true, turbo_frame: dom_id(task) } } %>
     </div>
   </div>
 
@@ -17,8 +25,8 @@
     <ul class="list-unstyled ps-3 border-start mt-2">
       <%= render partial: 'tasks/task',
                  collection: children,
-                 as: :task,
-                 locals: { project: project } %>
+                 as:         :task,
+                 locals:     { project: project } %>
     </ul>
   <% end %>
-</li>
+<% end %>

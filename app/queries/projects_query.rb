@@ -12,13 +12,8 @@ class ProjectsQuery < BaseQuery
 
   def call
     Project
-      .left_joins(:tasks)
-      .select(<<~SQL.squish)
-        projects.*,
-        SUM(CASE WHEN tasks.expires_at <= CURRENT_TIMESTAMP THEN 1 ELSE 0 END) AS expired_tasks_count
-      SQL
-      .includes(tasks: { subtasks: { subtasks: :subtasks } })
-      .group('projects.id')
+      .includes(active_parent_tasks: { subtasks: { subtasks: :subtasks } })
+      .includes(:expired_tasks, :tasks)
       .order(@order => @sort)
   end
 end

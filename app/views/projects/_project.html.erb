@@ -5,7 +5,7 @@
         <span class="fw-semibold"><%= project.name %></span>
 
         <div class="d-flex align-items-center gap-2">
-          <span class="badge bg-secondary"><%= project.expired_tasks_count %> expired</span>
+          <span class="badge bg-secondary"><%= project.expired_tasks.size %> expired</span>
 
           <%= button_to '', project,
                         method: :delete,
@@ -15,7 +15,10 @@
       </div>
 
       <ul class="list-group list-group-flush">
-        <%= render partial: 'tasks/task', collection: project.active_tasks, as: :task, locals: { project: project } %>
+        <%= render partial: 'tasks/task',
+                   collection: project.active_parent_tasks,
+                   as: :task,
+                   locals: { project: project } %>
       </ul>
     </div>
   </div>
