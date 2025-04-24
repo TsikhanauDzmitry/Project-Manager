@@ -35,6 +35,7 @@ Metrics/ModuleLength:
 Metrics/MethodLength:
   Exclude:
     - "db/migrate/*"
+    - "app/controllers/tasks_controller.rb"
 
 Metrics/AbcSize:
   Exclude:

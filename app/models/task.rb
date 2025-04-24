@@ -7,6 +7,9 @@ class Task < ApplicationRecord
   belongs_to :parent, class_name: 'Task', optional: true
   has_many :subtasks, class_name: 'Task', foreign_key: :parent_id, inverse_of: :parent, dependent: :delete_all
 
+  scope :expired, -> { where(expires_at: ..Time.zone.now) }
+  scope :active, -> { where('expires_at > ?', Time.zone.now) }
+
   validates :name, presence: true
 
   def expired?

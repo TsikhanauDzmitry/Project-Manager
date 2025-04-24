@@ -17,7 +17,7 @@ RSpec.describe Project, type: :model do
     it { is_expected.to have_many(:tasks).dependent(:delete_all) }
   end
 
-  describe '#expired_tasks_count' do
+  describe '#expired_tasks' do
     let(:project) { create(:project) }
 
     before do
@@ -26,11 +26,11 @@ RSpec.describe Project, type: :model do
     end
 
     it 'counts only expired tasks' do
-      expect(project.expired_tasks_count).to eq(2)
+      expect(project.expired_tasks.size).to eq(2)
     end
   end
 
-  describe '#active_tasks' do
+  describe '#active_parent_tasks' do
     let(:project) { create(:project) }
     let!(:parent) { create(:task, project: project) }
 
@@ -40,7 +40,7 @@ RSpec.describe Project, type: :model do
     end
 
     it 'returns only non-expired top-level tasks' do
-      expect(project.active_tasks).to contain_exactly(parent)
+      expect(project.active_parent_tasks).to contain_exactly(parent)
     end
   end
 end

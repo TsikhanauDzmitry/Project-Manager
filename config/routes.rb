@@ -2,7 +2,7 @@
 
 Rails.application.routes.draw do
   resources :projects, only: %i[index destroy], defaults: { format: :turbo_stream } do
-    resources :tasks, only: :destroy, defaults: { format: :turbo_stream }
+    resources :tasks, only: %i[edit update destroy], defaults: { format: :turbo_stream }
   end
   root 'projects#index'
 

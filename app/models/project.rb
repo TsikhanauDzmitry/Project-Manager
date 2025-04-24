@@ -2,14 +2,10 @@
 
 class Project < ApplicationRecord
   has_many :tasks, dependent: :delete_all
+  has_many :active_parent_tasks, -> { active.where(parent_id: nil) },
+           class_name: 'Task', foreign_key: :project_id, inverse_of: :project, dependent: :delete_all
+  has_many :expired_tasks, -> { expired },
+           class_name: 'Task', foreign_key: :project_id, inverse_of: :project, dependent: :delete_all
 
   validates :name, presence: true
-
-  def expired_tasks_count
-    self[:expired_tasks_count] || tasks.select(&:expired?).size
-  end
-
-  def active_tasks
-    tasks.reject(&:expired?).select { |t| t.parent_id.nil? }
-  end
 end
